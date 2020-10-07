@@ -35,12 +35,18 @@ public class Guard : MonoBehaviour {
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) {
         Debug.Log("triggering: " + other.tag);
         if (other.tag == "Player" && IsVisibleToGuard(other.transform.position)) {
             this._foundIntruder = true;
             Debug.Log("VISIBLE BY GUARD");
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.tag == "Player") {
+            this._foundIntruder = false;
+            // respawn player outside here
         }
     }
 
