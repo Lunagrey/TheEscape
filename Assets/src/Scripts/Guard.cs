@@ -11,13 +11,13 @@ public class Guard : MonoBehaviour {
     [SerializeField] private Transform[] _targetsDest;
 
     private NavMeshAgent _meshAgent;
-    private Vector3 _basePos;
     private int _targetIndex = 0;
     private int _indexDir = 1;
     private int _layerMask;
     private bool _foundIntruder = false;
     private float _actualPursueTime = 0f;
-    private float _actualCd = 0f;
+    private bool _nextDest = false;
+    private float _lookDir = 1;
 
     private void Awake() {
         this._meshAgent = this.GetComponent<NavMeshAgent>();
@@ -39,9 +39,23 @@ public class Guard : MonoBehaviour {
         } else {
             if (this.transform.position.x == this._targetsDest[this._targetIndex].position.x
                 && this.transform.position.z == this._targetsDest[this._targetIndex].position.z) {
-                CalculateNextDestination();
+                if (this._nextDest == false) {
+                    this._nextDest = true;
+                    this._lookDir = 1;
+                    if (Random.Range(-10, 10) < 0)
+                        this._lookDir = -1;
+                    StartCoroutine(LaunchNextDestination());
+                } else {
+                    this.transform.Rotate(Vector3.up * this._lookDir * 90f * Time.deltaTime);
+                }
             }
         }
+    }
+
+    IEnumerator LaunchNextDestination() {
+        yield return new WaitForSeconds(Random.Range(0, this._maxCd));
+        CalculateNextDestination();
+        this._nextDest = false;
     }
 
     private void OnTriggerEnter(Collider other) {
