@@ -37,15 +37,18 @@ public class Guard : MonoBehaviour {
                 this._meshAgent.SetDestination(GameObject.FindGameObjectWithTag("Player").transform.position);
             }
         } else {
-            if (this.transform.position.x == this._targetsDest[this._targetIndex].position.x
-                && this.transform.position.z == this._targetsDest[this._targetIndex].position.z) {
+            float dist = Mathf.Sqrt(Mathf.Pow((this.transform.position.x - this._targetsDest[this._targetIndex].position.x), 2) + Mathf.Pow((this.transform.position.z - this._targetsDest[this._targetIndex].position.z), 2) + Mathf.Pow((this.transform.position.y - this._targetsDest[this._targetIndex].position.y), 2));
+            Debug.Log("dist: " + dist);
+            if (dist < 1f) {
                 if (this._nextDest == false) {
+                    this._meshAgent.isStopped = true;
                     this._nextDest = true;
                     this._lookDir = 1;
                     if (Random.Range(-10, 10) < 0)
                         this._lookDir = -1;
                     StartCoroutine(LaunchNextDestination());
-                } else {
+                }
+                else {
                     this.transform.Rotate(Vector3.up * this._lookDir * 90f * Time.deltaTime);
                 }
             }
@@ -54,6 +57,7 @@ public class Guard : MonoBehaviour {
 
     IEnumerator LaunchNextDestination() {
         yield return new WaitForSeconds(Random.Range(0, this._maxCd));
+        this._meshAgent.isStopped = false;
         CalculateNextDestination();
         this._nextDest = false;
     }
@@ -76,7 +80,9 @@ public class Guard : MonoBehaviour {
     }
 
     private bool IsVisibleToGuard(Vector3 target) {
-        if (Physics.Raycast(this.transform.position, (target - this.transform.position), this._maxDetectRange, this._layerMask)) {
+        RaycastHit hit;
+        if (Physics.Raycast(this.transform.position, (target - this.transform.position), out hit,  this._maxDetectRange, this._layerMask) 
+            && hit.transform.tag == "Player") {
             return true;
         }
         return false;
@@ -90,6 +96,7 @@ public class Guard : MonoBehaviour {
 
     private void PrepareNextDestination() {
         this._targetIndex += this._indexDir;
+        Debug.Log("targetindex: " + this._targetIndex);
         if (this._targetIndex == this._targetsDest.Length) {
             this._targetIndex -= 2;
             this._indexDir = -1;
