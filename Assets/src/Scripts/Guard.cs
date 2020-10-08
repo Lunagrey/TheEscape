@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Guard : MonoBehaviour {
-    [SerializeField] private float _maxDetectRange = 10f;
+    [SerializeField] private float _maxDetectRange = 20f;
     [SerializeField] private float _maxPursueTime = 5f;
     [SerializeField] private float _maxCd = 5f;
     [SerializeField] private Transform[] _targetsDest;
@@ -31,13 +31,12 @@ public class Guard : MonoBehaviour {
             this._actualPursueTime += Time.deltaTime;
             if (this._actualPursueTime >= this._maxPursueTime) {
                 this._foundIntruder = false;
-                this._actualCd = 0f;
+                this._meshAgent.speed = 3.5f;
                 this.CalculateNearestPoint();
             } else {
                 this._meshAgent.SetDestination(GameObject.FindGameObjectWithTag("Player").transform.position);
             }
         } else {
-            this._actualCd += Time.deltaTime;
             if (this.transform.position.x == this._targetsDest[this._targetIndex].position.x
                 && this.transform.position.z == this._targetsDest[this._targetIndex].position.z) {
                 CalculateNextDestination();
@@ -46,23 +45,24 @@ public class Guard : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Player" && IsVisibleToGuard(other.transform.position) && this._foundIntruder == false && this._actualCd < this._maxCd) {
+        if (other.tag == "Player" && IsVisibleToGuard(other.transform.position) && this._foundIntruder == false) {
             this._foundIntruder = true;
             this._actualPursueTime = 0f;
-            Debug.Log("VISIBLE BY GUARD");
+            this._meshAgent.speed = 7f;
         }
     }
 
     private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Player") {
+        if (collision.gameObject.tag == "Player" && IsVisibleToGuard(collision.transform.position)) {
+            Debug.Log("INTRUDER CAUGHT");
             this._foundIntruder = false;
+            CalculateNearestPoint();
             // respawn player outside here
         }
     }
 
     private bool IsVisibleToGuard(Vector3 target) {
-        RaycastHit hit;
-        if (Physics.Raycast(this.transform.position, (target - this.transform.position), out hit, this._maxDetectRange, this._layerMask)) {
+        if (Physics.Raycast(this.transform.position, (target - this.transform.position), this._maxDetectRange, this._layerMask)) {
             return true;
         }
         return false;
