@@ -36,7 +36,12 @@ public class GrabChicken : MonoBehaviour
 
     private void ThrowChicken()
     {
+        chickenGrabbed.GetComponent<Chicken>().took = false;
+
         GameObject closestGuard = FindClosestEnemy();
+
+        if (closestGuard == null)
+            return;
 
         Vector3 normalizeDirection = (closestGuard.transform.position - transform.position).normalized;
 
@@ -54,6 +59,7 @@ public class GrabChicken : MonoBehaviour
 
     private void DropChicken()
     {
+        chickenGrabbed.GetComponent<Chicken>().took = false;
         chickenGrabbed.transform.parent = null;
 
         chickenGrabbed = null;
@@ -70,14 +76,19 @@ public class GrabChicken : MonoBehaviour
         chickenCanGrab.transform.localPosition = new Vector3(0, 1.2f, 0);
 
         chickenGrabbed = chickenCanGrab;
+
+        chickenGrabbed.GetComponent<Chicken>().took = true;
+
+
         chickenCanGrab = null;
         canGrab = true;
+
     }
 
     // get a chicken close to you
     private void OnTriggerEnter(Collider other)
     {
-
+        Debug.Log(other.tag);
 
         if (other.tag != "Chicken")
             return;

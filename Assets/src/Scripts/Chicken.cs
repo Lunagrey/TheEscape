@@ -109,4 +109,10 @@ public class Chicken : MonoBehaviour
             }
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Grass")
+            Destroy(this.gameObject);
+    }
 }
