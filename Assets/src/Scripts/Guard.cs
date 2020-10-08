@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class Guard : MonoBehaviour {
     [SerializeField] private float _maxDetectRange = 10f;
     [SerializeField] private float _maxPursueTime = 5f;
+    [SerializeField] private float _maxCd = 5f;
     [SerializeField] private Transform[] _targetsDest;
 
     private NavMeshAgent _meshAgent;
@@ -16,6 +17,7 @@ public class Guard : MonoBehaviour {
     private int _layerMask;
     private bool _foundIntruder = false;
     private float _actualPursueTime = 0f;
+    private float _actualCd = 0f;
 
     private void Awake() {
         this._meshAgent = this.GetComponent<NavMeshAgent>();
@@ -26,8 +28,16 @@ public class Guard : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (this._foundIntruder) {
-
+            this._actualPursueTime += Time.deltaTime;
+            if (this._actualPursueTime >= this._maxPursueTime) {
+                this._foundIntruder = false;
+                this._actualCd = 0f;
+                this.CalculateNearestPoint();
+            } else {
+                this._meshAgent.SetDestination(GameObject.FindGameObjectWithTag("Player").transform.position);
+            }
         } else {
+            this._actualCd += Time.deltaTime;
             if (this.transform.position.x == this._targetsDest[this._targetIndex].position.x
                 && this.transform.position.z == this._targetsDest[this._targetIndex].position.z) {
                 CalculateNextDestination();
@@ -36,9 +46,9 @@ public class Guard : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log("triggering: " + other.tag);
-        if (other.tag == "Player" && IsVisibleToGuard(other.transform.position)) {
+        if (other.tag == "Player" && IsVisibleToGuard(other.transform.position) && this._foundIntruder == false && this._actualCd < this._maxCd) {
             this._foundIntruder = true;
+            this._actualPursueTime = 0f;
             Debug.Log("VISIBLE BY GUARD");
         }
     }
@@ -74,6 +84,18 @@ public class Guard : MonoBehaviour {
             this._targetIndex = 0;
             this._indexDir = 1;
         }
+    }
+
+    private void CalculateNearestPoint() {
+        float distance = 999999f;
+        for (int i = 0; i < this._targetsDest.Length; i++) {
+            float dist = Mathf.Sqrt(Mathf.Pow((this.transform.position.x - this._targetsDest[i].position.x), 2) + Mathf.Pow((this.transform.position.z - this._targetsDest[i].position.z), 2) + Mathf.Pow((this.transform.position.y - this._targetsDest[i].position.y), 2));
+            if (dist < distance) {
+                this._targetIndex = i;
+                distance = dist;
+            }
+        }
+        this._meshAgent.SetDestination(this._targetsDest[this._targetIndex].position);
     }
 
     #endregion

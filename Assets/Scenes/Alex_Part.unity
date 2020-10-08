@@ -249,6 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxDetectRange: 0
   _maxPursueTime: 0
+  _maxCd: 5
   _targetsDest:
   - {fileID: 1492836642}
   - {fileID: 929040891}
@@ -786,7 +787,7 @@ GameObject:
   - component: {fileID: 174245293562941787}
   - component: {fileID: 2706659399724344721}
   - component: {fileID: 4507821829433656389}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -801,7 +802,7 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4507821829433656388}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
