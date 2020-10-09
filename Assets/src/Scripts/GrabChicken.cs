@@ -48,6 +48,8 @@ public class GrabChicken : MonoBehaviour
 
         //chickenGrabbed.tranform.position += normalizeDirection * chickenVelocity * Time.deltaTime;
 
+        chickenGrabbed.GetComponent<Rigidbody>().useGravity = true;
+
         chickenGrabbed.GetComponent<Rigidbody>().velocity = normalizeDirection * chickenVelocity;
 
 
@@ -61,6 +63,8 @@ public class GrabChicken : MonoBehaviour
     {
         chickenGrabbed.GetComponent<Chicken>().took = false;
         chickenGrabbed.transform.parent = null;
+
+        chickenGrabbed.GetComponent<Rigidbody>().useGravity = true;
 
         chickenGrabbed = null;
     }
@@ -78,6 +82,8 @@ public class GrabChicken : MonoBehaviour
         chickenGrabbed = chickenCanGrab;
 
         chickenGrabbed.GetComponent<Chicken>().took = true;
+
+        chickenGrabbed.GetComponent<Rigidbody>().useGravity = false;
 
 
         chickenCanGrab = null;
