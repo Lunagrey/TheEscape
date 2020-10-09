@@ -112,6 +112,7 @@ public class Chicken : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.transform.tag);
         if (collision.transform.tag == "Grass")
             Destroy(this.gameObject);
     }

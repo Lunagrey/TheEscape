@@ -11,11 +11,19 @@ public class GrabChicken : MonoBehaviour
 
     private bool canGrab = false;
 
-    [SerializeField] private float chickenVelocity = 10f;
+    [SerializeField] private float chickenVelocity = 20f;
 
     void Start()
     {
         
+    }
+
+
+    private void LateUpdate()
+    {
+        if (chickenGrabbed != null)
+            chickenGrabbed.transform.localPosition = new Vector3(0, 1.3f, 0);
+
     }
 
     void Update()
@@ -50,7 +58,12 @@ public class GrabChicken : MonoBehaviour
 
         chickenGrabbed.GetComponent<Rigidbody>().useGravity = true;
 
-        chickenGrabbed.GetComponent<Rigidbody>().velocity = normalizeDirection * chickenVelocity;
+        //chickenGrabbed.GetComponent<Rigidbody>().velocity = normalizeDirection * chickenVelocity;
+
+
+        normalizeDirection = new Vector3(normalizeDirection.x, 0, normalizeDirection.z);
+
+        chickenGrabbed.GetComponent<Rigidbody>().AddForce(normalizeDirection * chickenVelocity, ForceMode.Impulse);
 
 
         chickenGrabbed.transform.parent = null;
@@ -77,7 +90,7 @@ public class GrabChicken : MonoBehaviour
 
         chickenCanGrab.transform.SetParent(transform.transform);
 
-        chickenCanGrab.transform.localPosition = new Vector3(0, 1.2f, 0);
+        chickenCanGrab.transform.localPosition = new Vector3(0, 1.3f, 0);
 
         chickenGrabbed = chickenCanGrab;
 
@@ -94,7 +107,6 @@ public class GrabChicken : MonoBehaviour
     // get a chicken close to you
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag);
 
         if (other.tag != "Chicken")
             return;
