@@ -8,6 +8,7 @@ TagManager:
   - Chicken
   - Grass
   - Generator
+  - Cam
   layers:
   - Default
   - TransparentFX

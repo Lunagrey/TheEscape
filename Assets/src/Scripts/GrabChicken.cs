@@ -10,6 +10,7 @@ public class GrabChicken : MonoBehaviour
     private GameObject chickenCanGrab;
 
     private bool canGrab = false;
+    private bool canbreak = false;
 
     [SerializeField] private float chickenVelocity = 20f;
 
@@ -28,6 +29,11 @@ public class GrabChicken : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetMouseButtonDown(0) && this.canbreak == true) {
+            foreach (GameObject cam in GameObject.FindGameObjectsWithTag("Cam")) {
+                cam.GetComponent<SecurityCam>().BreakCam();
+            }
+        }
         if (Input.GetMouseButtonDown(0) &&  chickenGrabbed != null)
         {
             DropChicken();
@@ -107,6 +113,10 @@ public class GrabChicken : MonoBehaviour
     // get a chicken close to you
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "Generator" && this.canbreak == false)
+        {
+            this.canbreak = true;
+        }
 
         if (other.tag != "Chicken")
             return;

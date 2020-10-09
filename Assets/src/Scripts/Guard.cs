@@ -41,7 +41,13 @@ public class Guard : MonoBehaviour {
         } else {
             this._actualTaskTimer += Time.deltaTime;
             if (this._actualTaskTimer >= this._taskTimer) {
-                if (this._currentTask == GuardTask.FollowIntruder || this._currentTask == GuardTask.RepairCamera) {
+                if (this._currentTask == GuardTask.FollowIntruder) {
+                    this._meshAgent.speed = 3.5f;
+                    SetTask(GuardTask.GoNearestDest, -1);
+                } else if (this._currentTask == GuardTask.RepairCamera) {
+                    foreach (GameObject cam in GameObject.FindGameObjectsWithTag("Cam")) {
+                        cam.GetComponent<SecurityCam>().RepairCam();
+                    }
                     this._meshAgent.speed = 3.5f;
                     SetTask(GuardTask.GoNearestDest, -1);
                 }
