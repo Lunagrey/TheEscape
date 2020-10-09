@@ -68,10 +68,10 @@ public class SecurityCam : MonoBehaviour {
 
     private void Sequence() {
         this._seq = DOTween.Sequence();
-        this._seq.Append(this.transform.DORotate(Vector3.up * 45f, 3f));
-        this._seq.Append(this.transform.DORotate(Vector3.up, 3f));
-        this._seq.Append(this.transform.DORotate(Vector3.up * -45, 3f));
-        this._seq.Append(this.transform.DORotate(Vector3.up, 3f));
+        this._seq.Append(this.transform.DORotate(this.transform.rotation.eulerAngles + Vector3.up * 45f, 3f));
+        this._seq.Append(this.transform.DORotate(this.transform.rotation.eulerAngles + Vector3.up, 3f));
+        this._seq.Append(this.transform.DORotate(this.transform.rotation.eulerAngles + Vector3.up * -45, 3f));
+        this._seq.Append(this.transform.DORotate(this.transform.rotation.eulerAngles + Vector3.up, 3f));
         this._seq.OnComplete(() => { this._seq.Restart(); });
     }
 }
