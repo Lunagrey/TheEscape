@@ -7,6 +7,7 @@ TagManager:
   - Guard
   - Chicken
   - Grass
+  - Generator
   layers:
   - Default
   - TransparentFX
