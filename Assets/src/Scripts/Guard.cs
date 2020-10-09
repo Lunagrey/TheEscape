@@ -135,6 +135,9 @@ public class Guard : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.tag == "Player" && IsVisibleToGuard(collision.transform.position)) {
+            collision.gameObject.transform.GetComponent<GrabChicken>().DropChicken();
+            collision.gameObject.transform.position = new Vector3(-9, 0, -40);
+            MenuManager.instance.DeleteOneLife();
             SetTask(GuardTask.GoNearestDest, -1);
         }
     }

@@ -78,7 +78,7 @@ public class GrabChicken : MonoBehaviour
     }
 
 
-    private void DropChicken()
+    public void DropChicken()
     {
         chickenGrabbed.GetComponent<Chicken>().took = false;
         chickenGrabbed.transform.parent = null;
