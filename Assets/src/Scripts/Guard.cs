@@ -38,7 +38,7 @@ public class Guard : MonoBehaviour {
             }
         } else {
             float dist = Mathf.Sqrt(Mathf.Pow((this.transform.position.x - this._targetsDest[this._targetIndex].position.x), 2) + Mathf.Pow((this.transform.position.z - this._targetsDest[this._targetIndex].position.z), 2) + Mathf.Pow((this.transform.position.y - this._targetsDest[this._targetIndex].position.y), 2));
-            Debug.Log("dist: " + dist);
+            //Debug.Log("dist: " + dist);
             if (dist < 1f) {
                 if (this._nextDest == false) {
                     this._meshAgent.isStopped = true;
@@ -96,7 +96,7 @@ public class Guard : MonoBehaviour {
 
     private void PrepareNextDestination() {
         this._targetIndex += this._indexDir;
-        Debug.Log("targetindex: " + this._targetIndex);
+        //Debug.Log("targetindex: " + this._targetIndex);
         if (this._targetIndex == this._targetsDest.Length) {
             this._targetIndex -= 2;
             this._indexDir = -1;
