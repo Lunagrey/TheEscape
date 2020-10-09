@@ -80,12 +80,14 @@ public class GrabChicken : MonoBehaviour
 
     public void DropChicken()
     {
-        chickenGrabbed.GetComponent<Chicken>().took = false;
-        chickenGrabbed.transform.parent = null;
+        if (chickenGrabbed != null) {
+            chickenGrabbed.GetComponent<Chicken>().took = false;
+            chickenGrabbed.transform.parent = null;
 
-        chickenGrabbed.GetComponent<Rigidbody>().useGravity = true;
+            chickenGrabbed.GetComponent<Rigidbody>().useGravity = true;
 
-        chickenGrabbed = null;
+            chickenGrabbed = null;
+        }
     }
 
     // graab the chicken and make it children of player object
