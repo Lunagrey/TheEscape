@@ -103,7 +103,7 @@ public class Chicken : MonoBehaviour
                 this.currentState = State.Idle;
             }
         } else if (this.currentState == State.Launch) {
-            if (Physics.Raycast(this.transform.position + Vector3.up * 0.0001f, Vector3.down, 0.3f)) {
+            if (Physics.Raycast(this.transform.position + Vector3.up * 0.0001f, Vector3.down, 0.3f, LayerMask.GetMask("Default"))) {
                 this.agent.enabled = true;
                 this.currentState = State.Idle;
             }
